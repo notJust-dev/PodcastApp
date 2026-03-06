@@ -2,7 +2,8 @@ import '../../global.css'
 import { Stack } from 'expo-router'
 
 import { ClerkProvider, useAuth } from '@clerk/expo'
-import { tokenCache } from '@clerk/expo/token-cache'
+import { tokenCache } from '@clerk/expo/token-cache';
+import { resourceCache } from '@clerk/expo/resource-cache'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useReactQueryDevTools } from '@dev-plugins/react-query'
 import PlayerProvider from '@/providers/PlayerProvider'
@@ -16,12 +17,11 @@ if (!publishableKey) {
 const queryClient = new QueryClient();
 
 function RootStack() {
-  // const { isLoaded, isSignedIn } = useAuth();
-  const isSignedIn = true;
+  const { isLoaded, isSignedIn } = useAuth();
 
-  // if (!isLoaded) {
-  //   return null;
-  // }
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
     <Stack>
@@ -50,7 +50,11 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ClerkProvider
+        publishableKey={publishableKey}
+        tokenCache={tokenCache}
+        __experimental_resourceCache={resourceCache}
+      >
         <PlayerProvider>
           <RootStack />
         </PlayerProvider>
