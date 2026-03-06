@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, Button, ActivityIndicator, FlatList } from 'react-native'
+import { ActivityIndicator, FlatList, View, Text } from 'react-native'
 import { fetchTrending } from '@/services/podcast-index'
 import { useQuery } from '@tanstack/react-query';
+import { PodcastCard } from '@/components/PodcastCard'
 
 export default function HomeScreen() {
   const { data, isLoading, error } = useQuery({
@@ -19,8 +20,15 @@ export default function HomeScreen() {
   return (
     <FlatList
       data={data?.feeds}
-      renderItem={({ item }) => <Text className='text-2xl font-bold text-gray-500 p-5 m-10'>{item.title}</Text>}
+      contentContainerClassName='gap-4 p-2'
+      columnWrapperClassName='gap-2'
+      renderItem={({ item }) =>
+        <View className='flex-1 max-w-1/2'>
+          <PodcastCard podcast={item} />
+        </View>
+      }
       contentInsetAdjustmentBehavior="automatic"
+      numColumns={2}
     />
   )
 }
