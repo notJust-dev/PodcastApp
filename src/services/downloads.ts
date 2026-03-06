@@ -15,7 +15,9 @@ export async function downloadEpisode(
   episodeId: number,
   url: string,
 ): Promise<string> {
-  downloadsDir.create();
+  if (!downloadsDir.exists) {
+    downloadsDir.create();
+  }
   const output = await File.downloadFileAsync(url, downloadsDir);
   // Rename to our standard name
   const dest = new File(downloadsDir, getFileName(episodeId));

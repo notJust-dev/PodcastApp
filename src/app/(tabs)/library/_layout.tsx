@@ -4,6 +4,7 @@ export default function LibraryLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Library', headerLargeTitle: true }} />
+      <Stack.Screen name="downloads" options={{ title: 'Downloads' }} />
     </Stack>
   )
 }

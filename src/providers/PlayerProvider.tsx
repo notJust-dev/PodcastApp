@@ -1,7 +1,7 @@
 import { Episode } from '@/types';
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { AudioPlayer, AudioStatus, createAudioPlayer, setAudioModeAsync, useAudioPlayerStatus } from 'expo-audio';
-import { getLocalEpisodePath } from '@/services/downloads';
+import { useDownloadsStore } from '@/stores/useDownloadsStore';
 
 
 type PlayerContext = {
@@ -27,11 +27,13 @@ export default function PlayerProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
+  const getDownload = useDownloadsStore((s) => s.getDownload);
+
   const setActiveEpisode = (episode: Episode | null) => {
     setEpisode(episode);
 
-    const localPath = episode ? getLocalEpisodePath(episode.id) : null;
-    player.replace({ uri: localPath ?? episode?.enclosureUrl })
+    const download = episode ? getDownload(episode.guid) : undefined;
+    player.replace({ uri: download?.localUri ?? episode?.enclosureUrl })
 
     // Adjust with actual data
     player.setActiveForLockScreen(true, {

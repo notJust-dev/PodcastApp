@@ -15,6 +15,7 @@
     "@react-native-community/slider": "5.1.2",
     "@tanstack/react-query": "^5.90.21",
     "@uidotdev/usehooks": "^2.4.1",
+    "babel-preset-expo": "^55.0.10",
     "expo": "~55.0.5",
     "expo-audio": "~55.0.8",
     "expo-constants": "~55.0.7",
@@ -36,9 +37,11 @@
     "react-native-safe-area-context": "~5.6.2",
     "react-native-screens": "~4.23.0",
     "react-native-web": "^0.21.0",
-    "react-native-worklets": "0.7.2"
+    "react-native-worklets": "0.7.2",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/react": "~19.2.2",
     "postcss": "^8.5.8",

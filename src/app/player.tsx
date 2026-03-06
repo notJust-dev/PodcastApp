@@ -4,7 +4,8 @@ import { Redirect } from 'expo-router';
 import { ActivityIndicator, Alert, Image, Pressable, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
-import { downloadEpisode, deleteEpisodeDownload, getLocalEpisodePath } from '@/services/downloads';
+import { downloadEpisode, deleteEpisodeDownload } from '@/services/downloads';
+import { useDownloadsStore } from '@/stores/useDownloadsStore';
 
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -13,9 +14,8 @@ export default function PlayerScreen() {
   const [isSeeking, setIsSeeking] = useState(false);
   const [seekValue, setSeekValue] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isDownloaded, setIsDownloaded] = useState(() =>
-    episode ? !!getLocalEpisodePath(episode.id) : false
-  );
+  const { addDownload, removeDownload, isDownloaded: checkDownloaded } = useDownloadsStore();
+  const isDownloaded = episode ? checkDownloaded(episode.guid) : false;
 
   if (!episode) {
     return <Redirect href={"/home"} />
@@ -76,7 +76,7 @@ export default function PlayerScreen() {
                   style: 'destructive',
                   onPress: () => {
                     deleteEpisodeDownload(episode.id);
-                    setIsDownloaded(false);
+                    removeDownload(episode.guid);
                   },
                 },
               ]);
@@ -84,9 +84,19 @@ export default function PlayerScreen() {
             }
             setIsDownloading(true);
             try {
-              await downloadEpisode(episode.id, episode.enclosureUrl);
-              setIsDownloaded(true);
+              const localUri = await downloadEpisode(episode.id, episode.enclosureUrl);
+              addDownload({
+                guid: episode.guid,
+                title: episode.title,
+                image: episode.image || episode.feedImage,
+                feedId: String(episode.feedId),
+                feedTitle: episode.feedTitle,
+                localUri,
+                downloadedAt: Date.now(),
+                episodeData: episode,
+              });
             } catch (e) {
+              console.log(e);
               Alert.alert('Download Failed', 'Could not download the episode.');
             } finally {
               setIsDownloading(false);
