@@ -3,6 +3,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { fetchFeedById } from '@/services/podcast-index'
 import { useQuery } from '@tanstack/react-query';
+import { EpisodesList } from '@/components/EpisodesList'
 
 export default function PodcastDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -65,6 +66,8 @@ export default function PodcastDetails() {
           </Pressable>
         </View>
       ) : null}
+
+      <EpisodesList feedId={id} />
     </ScrollView>
   )
 }
