@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
 
 export default function PlayerScreen() {
-  const { episode } = usePlayer();
+  const { episode, player, playerStatus } = usePlayer();
 
   if (!episode) {
     return <Redirect href={"/home"} />
@@ -69,8 +69,16 @@ export default function PlayerScreen() {
         <Pressable>
           <Ionicons name="play-back" size={28} color="black" />
         </Pressable>
-        <Pressable className="w-16 h-16 rounded-full bg-black items-center justify-center">
-          <Ionicons name="play" size={32} color="white" style={{ marginLeft: 3 }} />
+        <Pressable
+          onPress={() => {
+            if (playerStatus.playing) {
+              player.pause();
+            } else {
+              player.play();
+            }
+          }}
+          className="w-16 h-16 rounded-full bg-black items-center justify-center">
+          <Ionicons name={playerStatus.playing ? 'pause' : 'play'} size={32} color="white" style={{ marginLeft: 3 }} />
         </Pressable>
         <Pressable>
           <Ionicons name="play-forward" size={28} color="black" />
