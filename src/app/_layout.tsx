@@ -15,11 +15,12 @@ if (!publishableKey) {
 const queryClient = new QueryClient();
 
 function RootStack() {
-  const { isLoaded, isSignedIn } = useAuth();
+  // const { isLoaded, isSignedIn } = useAuth();
+  const isSignedIn = true;
 
-  if (!isLoaded) {
-    return null;
-  }
+  // if (!isLoaded) {
+  //   return null;
+  // }
 
   return (
     <Stack>

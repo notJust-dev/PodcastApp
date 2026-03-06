@@ -19,19 +19,8 @@ export default function HomeScreen() {
   return (
     <FlatList
       data={data?.feeds}
-      renderItem={({ item }) => <Text>{item.title}</Text>}
+      renderItem={({ item }) => <Text className='text-2xl font-bold text-gray-500 p-5 m-10'>{item.title}</Text>}
       contentInsetAdjustmentBehavior="automatic"
     />
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-  },
-})
