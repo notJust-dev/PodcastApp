@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { usePlayer } from '@/providers/PlayerProvider';
 import { Redirect } from 'expo-router';
-import { Image, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Pressable, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
+import { downloadEpisode, deleteEpisodeDownload, getLocalEpisodePath } from '@/services/downloads';
 
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -11,6 +12,10 @@ export default function PlayerScreen() {
   const { episode, player, playerStatus } = usePlayer();
   const [isSeeking, setIsSeeking] = useState(false);
   const [seekValue, setSeekValue] = useState(0);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloaded, setIsDownloaded] = useState(() =>
+    episode ? !!getLocalEpisodePath(episode.id) : false
+  );
 
   if (!episode) {
     return <Redirect href={"/home"} />
@@ -60,8 +65,43 @@ export default function PlayerScreen() {
             {episode.feedTitle}
           </Text>
         </View>
-        <Pressable>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#9ca3af" />
+        <Pressable
+          onPress={async () => {
+            if (isDownloading) return;
+            if (isDownloaded) {
+              Alert.alert('Remove Download', 'Delete the downloaded episode?', [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Delete',
+                  style: 'destructive',
+                  onPress: () => {
+                    deleteEpisodeDownload(episode.id);
+                    setIsDownloaded(false);
+                  },
+                },
+              ]);
+              return;
+            }
+            setIsDownloading(true);
+            try {
+              await downloadEpisode(episode.id, episode.enclosureUrl);
+              setIsDownloaded(true);
+            } catch (e) {
+              Alert.alert('Download Failed', 'Could not download the episode.');
+            } finally {
+              setIsDownloading(false);
+            }
+          }}
+        >
+          {isDownloading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <Ionicons
+              name={isDownloaded ? 'checkmark-circle' : 'arrow-down-circle-outline'}
+              size={28}
+              color={isDownloaded ? '#3b82f6' : '#9ca3af'}
+            />
+          )}
         </Pressable>
       </View>
 
