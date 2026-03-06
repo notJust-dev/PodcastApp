@@ -5,6 +5,7 @@ import { ClerkProvider, useAuth } from '@clerk/expo'
 import { tokenCache } from '@clerk/expo/token-cache'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useReactQueryDevTools } from '@dev-plugins/react-query'
+import PlayerProvider from '@/providers/PlayerProvider'
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -43,7 +44,9 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <RootStack />
+        <PlayerProvider>
+          <RootStack />
+        </PlayerProvider>
       </ClerkProvider>
     </QueryClientProvider>
   )

@@ -1,6 +1,8 @@
-import { Image, Text, View } from 'react-native'
+import { Image, Pressable, Text, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Episode } from '@/types'
+import { usePlayer } from '@/providers/PlayerProvider';
+import { router } from 'expo-router';
 
 interface EpisodeListItemProps {
   episode: Episode
@@ -15,6 +17,8 @@ function formatDuration(seconds: number | null): string {
 }
 
 export function EpisodeListItem({ episode }: EpisodeListItemProps) {
+  const { setEpisode } = usePlayer();
+
   return (
     <View className="flex-row gap-3 py-4">
       <View className="flex-1 gap-1">
@@ -28,12 +32,15 @@ export function EpisodeListItem({ episode }: EpisodeListItemProps) {
           {episode.description}
         </Text>
         {episode.duration ? (
-          <View className="flex-row items-center gap-1 mt-1">
+          <Pressable onPress={() => {
+            setEpisode(episode);
+            router.push('/player')
+          }} className="flex-row items-center gap-1 mt-1 bg-neutral-200 self-start p-2 rounded-full">
             <Ionicons name="play" size={12} color="black" />
             <Text className="text-xs font-medium">
               {formatDuration(episode.duration)}
             </Text>
-          </View>
+          </Pressable>
         ) : null}
       </View>
       <Image
