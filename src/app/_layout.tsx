@@ -1,3 +1,4 @@
+import '../../global.css'
 import { Stack } from 'expo-router'
 
 import { ClerkProvider, useAuth } from '@clerk/expo'
