@@ -33,6 +33,13 @@ function RootStack() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="profile" options={{ presentation: 'modal', title: 'Profile' }} />
         <Stack.Screen name='index' />
+        <Stack.Screen
+          name='player'
+          options={{
+            title: "Player",
+            presentation: "modal",
+          }}
+        />
       </Stack.Protected>
     </Stack>
   )

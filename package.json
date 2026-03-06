@@ -12,6 +12,7 @@
     "@clerk/expo": "^3.0.1",
     "@dev-plugins/react-query": "^0.4.0",
     "@expo/metro-config": "~55.0.9",
+    "@react-native-community/slider": "5.1.2",
     "@tanstack/react-query": "^5.90.21",
     "expo": "~55.0.5",
     "expo-audio": "~55.0.8",
