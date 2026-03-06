@@ -1,6 +1,6 @@
 import { Episode } from '@/types';
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { AudioPlayer, AudioStatus, createAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { AudioPlayer, AudioStatus, createAudioPlayer, setAudioModeAsync, useAudioPlayerStatus } from 'expo-audio';
 
 
 type PlayerContext = {
@@ -18,13 +18,30 @@ export default function PlayerProvider({ children }: PropsWithChildren) {
   const [episode, setEpisode] = useState<Episode | null>(null);
   const status = useAudioPlayerStatus(player);
 
+  useEffect(() => {
+    setAudioModeAsync({
+      playsInSilentMode: true,
+      shouldPlayInBackground: true,
+      interruptionMode: 'doNotMix',
+    });
+  }, []);
+
   const setActiveEpisode = (episode: Episode | null) => {
     setEpisode(episode);
 
     player.replace({ uri: episode?.enclosureUrl })
+
+    // Adjust with actual data
+    player.setActiveForLockScreen(true, {
+      title: 'My Audio Title',
+      artist: 'Artist Name',
+      albumTitle: 'Album Name',
+      artworkUrl: 'https://example.com/artwork.jpg', // optional
+    });
+
+
     player.play();
   }
-
   console.log("Currently playing: ", episode)
 
   return (
