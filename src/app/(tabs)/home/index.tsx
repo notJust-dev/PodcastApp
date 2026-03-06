@@ -23,7 +23,7 @@ export default function HomeScreen() {
       contentContainerClassName='gap-4 p-2'
       columnWrapperClassName='gap-2'
       renderItem={({ item }) =>
-        <View className='flex-1 max-w-1/2'>
+        <View key={item.id} className='flex-1 max-w-1/2'>
           <PodcastCard podcast={item} />
         </View>
       }

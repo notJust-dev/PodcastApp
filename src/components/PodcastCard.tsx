@@ -9,7 +9,7 @@ interface PodcastCardProps {
 export function PodcastCard({ podcast }: PodcastCardProps) {
   return (
     <Link href={`/home/${podcast.id}`} asChild>
-      <Pressable className="flex-1 gap-2">
+      <Pressable className="gap-2">
         <Image
           className="w-full aspect-square rounded-2xl"
           source={{ uri: podcast.artwork || podcast.image }}
